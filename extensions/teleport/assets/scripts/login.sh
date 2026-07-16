@@ -14,13 +14,13 @@ match_max 100000
 expect {
   -nocase -re "password" { send -- "${PASSWORD}\r" }
   timeout { puts "ERROR: timed out waiting for the password prompt"; exit 1 }
-  eof { puts "ERROR: tsh exited before prompting for the password"; exit 1 }
+  eof { catch wait result; exit [lindex \$result 3] }
 }
 
 expect {
   -nocase -re "otp|token|second factor" { send -- "${OTP}\r" }
   timeout { puts "ERROR: timed out waiting for the OTP prompt"; exit 1 }
-  eof { puts "ERROR: tsh exited before prompting for the OTP"; exit 1 }
+  eof { catch wait result; exit [lindex \$result 3] }
 }
 
 expect eof
